@@ -35,6 +35,10 @@ cel * adicionarCel(int num)
     return novaCel;
 }
 
+/* 
+    ESTRUTURAS DE INSERÇÃO
+*/
+
 //Insere o elemento em uma posição requisitada
 int inserirPos(lista *l, int pos, int elem) 
 {
@@ -74,7 +78,7 @@ int inserirPos(lista *l, int pos, int elem)
 //Insere no final urrr
 int inserirFinal(lista *l, int elem) 
 {
-    cel *novaCelula = adicionarCelula(elem);
+    cel *novaCelula = adicionarCel(elem);
     if(!novaCelula) {
         return 1;
     }
@@ -94,7 +98,7 @@ int inserirFinal(lista *l, int elem)
 
 //...
 int inserirInicio(lista *l, int elem) {
-    cel *novaCelula = adicionarCelula(elem);
+    cel *novaCelula = adicionarCel(elem);
 
     if(!novaCelula) {
         return 1;
@@ -110,10 +114,91 @@ int inserirInicio(lista *l, int elem) {
     return 0;
 }
 
+/*
+    ESTRUTURA DE REMOÇÃO
+*/
+
+int removerInicio(lista *l) {
+    if(estaVazia(l)) {
+        return 1;
+    }
+
+    cel *inicio = l->inicio;
+    l->inicio = l->inicio->next;
+    free(inicio);
+
+    return 0;
+}
+
 int removerPos(lista *l, int pos) {
-    
+    if(estaVazia(l)) {
+        return 1;
+    }
+
+    cel **temp = &(l->inicio);
+
+    while( *temp != NULL && pos > 1) {
+        temp = &((*temp)->next);
+        pos--;
+    }
+
+    if(*temp == NULL) { // Chegou no final na lista, mas não na posição requisitada.
+        return 1;
+    }
+
+    cel *elem = *temp;
+    *temp = elem->next; // O elemento requisitado vira o próximo
+    free(elem);
+    return 0;
+}
+
+int removerFinal(lista *l) {
+    if(estaVazia(l)) {
+        return 1;
+    }
+
+    cel **temp = &(l->inicio);
+
+    while ( (*temp)->next != NULL ) {
+        temp = &((*temp)->next);
+    }
+
+    free(*temp);
+    *temp = NULL;
+
+    return 0;
+}
+
+void mostrarLista(lista l) {
+    cel *temp = l.inicio;
+
+    while(temp != NULL) {
+        printf("%d ", temp->num);
+        temp = temp->next;
+    }
+
+    printf("\n");
 }
 
 int main () {
+    lista l;
+    inicializar(&l);
 
+    for(int i=0; i<10; i++) {
+        inserirPos(&l, i, i+1);
+    }
+    
+    inserirInicio(&l, 20);
+    inserirFinal(&l, 1);
+    
+
+    mostrarLista(l);
+    
+    removerInicio(&l);
+    
+    removerFinal(&l);
+    
+    removerPos(&l, 4);
+    
+    mostrarLista(l);
 }
