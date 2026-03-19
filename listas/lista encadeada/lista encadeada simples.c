@@ -4,7 +4,7 @@
 // Estrutura da célula ('elemento' da lista)
 typedef struct sCel {
     int num;
-    struct sCel *next;
+    struct sCel *prox;
 } cel; 
 
 // Estrutura que aponta pro início da lista
@@ -30,7 +30,7 @@ está cheia.
 cel * adicionarCel(int num) 
 {
     cel * novaCel = (cel*) malloc(sizeof(cel));
-    novaCel->next = NULL;
+    novaCel->prox = NULL;
     novaCel->num = num;
     return novaCel;
 }
@@ -48,10 +48,10 @@ int inserirPos(lista *l, int pos, int elem)
 
     cel *novaCelula = adicionarCel(elem);
 
-    cel **temp = &l->inicio;
+    cel **atual = &l->inicio;
 
-    while(*temp != NULL && pos > 0) {
-        temp = &(*temp)->next;
+    while(*atual != NULL && pos > 0) {
+        atual = &(*atual)->prox;
         pos--;
     }
 
@@ -62,14 +62,14 @@ int inserirPos(lista *l, int pos, int elem)
         return 1;
     }
 
-    novaCelula->next = *temp;
-    *temp = novaCelula;
+    novaCelula->prox = *atual;
+    *atual = novaCelula;
 
     /*
         Tem outro jeito de fazer a inserção, sem usar ponteiro
-        pra ponteiro. Entretanto esse modo é meio gambiarra,
+        pra ponteiro. Entretanto esse modo é meio 'gambiarra',
         tu teria que parar uma posição antes do elemento realmente
-        requisitado e mudar o next ao invés do propriamente dito elemento
+        requisitado e mudar o prox ao invés do propriamente dito elemento
     */
     
     return 0;
@@ -86,12 +86,12 @@ int inserirFinal(lista *l, int elem)
     if(estaVazia(l)) {
         l->inicio = novaCelula;
     } else {
-        cel *temp = l->inicio;
+        cel *atual = l->inicio;
         
-        while(temp->next != NULL) {
-            temp = temp->next;
+        while(atual->prox != NULL) {
+            atual = atual->prox;
         }
-        temp->next = novaCelula;
+        atual->prox = novaCelula;
     }
     return 0;
 }
@@ -107,7 +107,7 @@ int inserirInicio(lista *l, int elem) {
     if(estaVazia(l)) {
         l->inicio = novaCelula;
     } else {
-        novaCelula->next = l->inicio;
+        novaCelula->prox = l->inicio;
         l->inicio = novaCelula;
     }
 
@@ -124,7 +124,7 @@ int removerInicio(lista *l) {
     }
 
     cel *inicio = l->inicio;
-    l->inicio = l->inicio->next;
+    l->inicio = l->inicio->prox;
     free(inicio);
 
     return 0;
@@ -135,19 +135,19 @@ int removerPos(lista *l, int pos) {
         return 1;
     }
 
-    cel **temp = &(l->inicio);
+    cel **atual = &(l->inicio);
 
-    while( *temp != NULL && pos > 1) {
-        temp = &((*temp)->next);
+    while( *atual != NULL && pos > 1) {
+        atual = &((*atual)->prox);
         pos--;
     }
 
-    if(*temp == NULL) { // Chegou no final na lista, mas não na posição requisitada.
+    if(*atual == NULL) { // Chegou no final na lista, mas não na posição requisitada.
         return 1;
     }
 
-    cel *elem = *temp;
-    *temp = elem->next; // O elemento requisitado vira o próximo
+    cel *elem = *atual;
+    *atual = elem->prox; // O elemento requisitado vira o próximo
     free(elem);
     return 0;
 }
@@ -157,24 +157,24 @@ int removerFinal(lista *l) {
         return 1;
     }
 
-    cel **temp = &(l->inicio);
+    cel **atual = &(l->inicio);
 
-    while ( (*temp)->next != NULL ) {
-        temp = &((*temp)->next);
+    while ( (*atual)->prox != NULL ) {
+        atual = &((*atual)->prox);
     }
 
-    free(*temp);
-    *temp = NULL;
+    free(*atual);
+    *atual = NULL;
 
     return 0;
 }
 
 void mostrarLista(lista l) {
-    cel *temp = l.inicio;
+    cel *atual = l.inicio;
 
-    while(temp != NULL) {
-        printf("%d ", temp->num);
-        temp = temp->next;
+    while(atual != NULL) {
+        printf("%d ", atual->num);
+        atual = atual->prox;
     }
 
     printf("\n");
