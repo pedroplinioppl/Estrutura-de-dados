@@ -63,7 +63,8 @@ int inserirPos(lista *l, int pos, int elem)
             return 1;
         }
 
-        l->inicio = l->fim = novaCelula;
+        l->inicio = novaCelula
+        l->fim = novaCelula;
         return 0;
     }
 
@@ -74,7 +75,7 @@ int inserirPos(lista *l, int pos, int elem)
         pos--;
     }
 
-    if(pos > 0) {
+    if(pos > 0) { // pos != 0 não é a posição desejada
         free(novaCelula);
         return 1;
     }
