@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+A ideia da lista encadeada circular é a célula final apontar pro início.
+*/
+
 typedef struct sCel {
     int num;
     struct sCel *prox; 
