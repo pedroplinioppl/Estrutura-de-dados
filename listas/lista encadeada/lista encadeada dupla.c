@@ -33,6 +33,12 @@ está cheia.
 cel * adicionarCel(int num) 
 {
     cel * novaCel = (cel*) malloc(sizeof(cel));
+    
+    if (!novaCel) 
+    { 
+        return NULL;
+    }
+    
     novaCel->prox = NULL;
     novaCel->ant = NULL;
     novaCel->num = num;
@@ -63,7 +69,7 @@ int inserirPos(lista *l, int pos, int elem)
             return 1;
         }
 
-        l->inicio = novaCelula
+        l->inicio = novaCelula;
         l->fim = novaCelula;
         return 0;
     }

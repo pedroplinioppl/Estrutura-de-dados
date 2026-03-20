@@ -30,6 +30,12 @@ está cheia.
 cel * adicionarCel(int num) 
 {
     cel * novaCel = (cel*) malloc(sizeof(cel));
+    
+    if (!novaCel) 
+    { 
+        return NULL;
+    }
+    
     novaCel->prox = NULL;
     novaCel->num = num;
     return novaCel;
