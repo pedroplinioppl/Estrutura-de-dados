@@ -113,6 +113,80 @@ int inserirPos(lista *l, int pos, int elem) {
     return 0;
 }
 
+int removerInicio(lista *l) {
+    if(estaVazia(l)) {
+        return 1;
+    }
+    
+    cel *inicio = l->fim->prox;
+    
+    if(inicio == l->fim) {
+        l->fim = NULL;
+    } else {
+        l->fim->prox = inicio->prox;
+    }
+    
+    free(inicio);
+    return 0;
+}
+
+int removerPos(lista *l, int pos) {
+    if (estaVazia(l) || pos < 0) {
+        printf("Lista vazia ou posicao invalida\n");
+        return 1;
+    }
+
+    cel *atual = l->fim->prox;  
+    cel *prev = l->fim; 
+
+    if (pos == 0) {
+        removerInicio(l);
+        return 0;
+    }
+
+    for (int i = 0; i < pos; i++) {
+        prev = atual;
+        atual = atual->prox;
+        if (atual == l->fim->prox) { //Atual ser igual a inicio implica que a lista toda ja foi investigada
+            printf("Posicao invalida\n");
+            return 1;
+        }
+    }
+
+    prev->prox = atual->prox;
+    if (atual == l->fim) { 
+        l->fim = prev;
+    }
+
+    free(atual);
+    return 0;
+}
+
+int removerFinal(lista *l) {
+    if (estaVazia(l)) {
+        return 1;  
+    }
+
+    cel *inicio = l->fim->prox;
+    cel *fim = l->fim;
+
+    if (inicio == l->fim) {  
+        free(fim);
+        l->fim = NULL;
+    } else {
+        cel *atual = inicio;
+
+        while (atual->prox != fim) {
+            atual = atual->prox;
+        }
+        atual->prox = inicio;
+        free(fim);
+        l->fim = atual;
+    }
+
+    return 0;
+}
+
 void mostrarLista(lista l) {
     if (estaVazia(&l)) {
         printf("Lista vazia\n");
@@ -141,6 +215,14 @@ int main() {
     inserirInicio(&l, 20);
     
     inserirFim(&l, 15);
+    
+    mostrarLista(l);
+    
+    removerInicio(&l);
+    
+    removerFinal(&l);
+    
+    removerPos(&l, 4);
     
     mostrarLista(l);
     
