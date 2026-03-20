@@ -170,6 +170,10 @@ int removerFinal(lista *l) {
 }
 
 void mostrarLista(lista l) {
+    if(estaVazia(&l)) {
+        return;
+    }
+
     cel *atual = l.inicio;
 
     while(atual != NULL) {
