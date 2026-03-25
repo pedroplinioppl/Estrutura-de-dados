@@ -8,12 +8,12 @@ typedef struct sCel {
 
 typedef struct {
     cel *inicio;
-    cel *topo;
+    cel *fim;
 } fila;
 
 void inicializar(fila *f) {
     f->inicio = NULL;
-    f->topo = NULL;
+    f->fim = NULL;
 }
 
 int estaVazia(fila *f) {
@@ -35,10 +35,10 @@ int enqueue(fila *f, int elem) {
     }
     if(estaVazia(f)) {
         f->inicio = novaCel;
-        f->topo = novaCel;
+        f->fim = novaCel;
     } else {
-        f->topo->prox = novaCel;
-        f->topo = novaCel;
+        f->fim->prox = novaCel;
+        f->fim = novaCel;
     }
 
     return 0;
@@ -49,9 +49,9 @@ int dequeue(fila *f) {
         return 1;
     }
     cel * inicio = f->inicio;
-    
-    if(f->inicio == f->topo) {
-        f->topo = NULL;
+
+    if(f->inicio == f->fim) {
+        f->fim = NULL;
         f->inicio = NULL;
     } else { 
         f->inicio = inicio->prox;
