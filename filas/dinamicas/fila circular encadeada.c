@@ -1,56 +1,46 @@
-#include <stdio.h>
 #include <stdlib.h>
-
-/*
-A ideia da fila encadeada circular é a célula final apontar pro início.
-*/
+#include <stdio.h>
 
 typedef struct sCel {
     int num;
-    struct sCel *prox; 
-} cel;
+    struct sCel *prox;
+} cel; 
 
 typedef struct {
-    cel *fim; // uma fila circular só precisa apontar pro final, pois o começo é logo o próximo
+    cel *inicio;
+    cel *fim;
 } fila;
 
 void inicializar(fila *f) {
+    f->inicio = NULL;
     f->fim = NULL;
 }
 
 int estaVazia(fila *f) {
-    return f->fim == NULL;
+    return f->inicio == NULL;
 }
 
-cel *adicionarCelula(int num) {
-    cel *novaCel = (cel*) malloc(sizeof(cel));
-    
-    if (!novaCel) 
-    { 
-        return NULL;
-    }
-    
+cel * addCel(int num) {
+    cel * novaCel = (cel*) malloc(sizeof(cel));
     novaCel->prox = NULL;
     novaCel->num = num;
+
     return novaCel;
 }
 
 int enqueue(fila *f, int elem) {
-    cel *novaCel = adicionarCelula(elem);
-    
+    cel *novaCel = addCel(elem);
     if(!novaCel) {
         return 1;
     }
-    
     if(estaVazia(f)) {
-        novaCel->prox = novaCel;
+        f->inicio = novaCel;
         f->fim = novaCel;
     } else {
-        novaCel->prox = f->fim->prox;
         f->fim->prox = novaCel;
         f->fim = novaCel;
     }
-    
+
     return 0;
 }
 
@@ -58,55 +48,51 @@ int dequeue(fila *f) {
     if(estaVazia(f)) {
         return 1;
     }
-    
-    cel *inicio = f->fim->prox;
-    
-    if(inicio == f->fim) {
+    cel * inicio = f->inicio;
+
+    if(f->inicio == f->fim) {
         f->fim = NULL;
-    } else {
-        f->fim->prox = inicio->prox;
+        f->inicio = NULL;
+    } else { 
+        f->inicio = inicio->prox;
+        
     }
-    
+
     free(inicio);
+
     return 0;
 }
 
 void mostrarFila(fila f) {
-    if (estaVazia(&f)) {
-        printf("fila vazia\n");
+    if(estaVazia(&f)) {
         return;
     }
 
-    cel *inicio = f.fim->prox;
-    cel *atual = inicio;
+    cel *atual = f.inicio;
 
-    do {
+    while(atual != NULL) {
         printf("%d ", atual->num);
         atual = atual->prox;
-    } while (atual != inicio);
-
+    }
     printf("\n");
 }
 
 int main() {
     fila f;
+
     inicializar(&f);
 
     for(int i=0; i<10; i++) {
         enqueue(&f, i+1);
     }
+
+    mostrarFila(f); // 1...10
     
-    mostrarFila(f);  
-
-    for (int i = 0; i < 3; i++) {
-        dequeue(&f);
-    }
-
-    for (int i = 0; i < 3; i++) {
-        enqueue(&f, i * 10);
-    }
-
-    mostrarFila(f); 
+    dequeue(&f);
     
+    dequeue(&f);
+    
+    mostrarFila(f); //  3...10
+
     return 0;
 }
